@@ -1,9 +1,34 @@
+let helpText = `
+This interactive site searches for sounds on 'freesound.org' given keywords.  Once loaded the top sound results will appear below and automatically play on loop.  Note, results are not gratinated to match, but best effort of Freedsound’s search algorithm.  All results use the Freesound API v2.  Please create a free API token/key for use in this site from your Freesound's account at 'https://freesound.org/apiv2/apply'.
+`;
+let helpActive = false;
 
 let apiKey = null;
 document.getElementById("token_input").focus();
 
 document.getElementById('search_submit').addEventListener("click", generateMix);
 document.getElementById('search_input').addEventListener("keyup", generateMix);
+document.getElementById('help_submit').addEventListener("click", toggleHelp);
+
+function toggleHelp() {
+    switch(helpActive) {
+        case false:
+            document.getElementById('help').innerHTML = `<br>${helpText}`;
+            helpActive = true;
+            break;        
+        case true:
+            document.getElementById('help').innerHTML = null;
+            helpActive = false;
+            break;
+    }
+}
+
+function toggleMute(evt) {
+    console.log(evt.currentTarget);
+
+
+
+}
 
 function generateMix(evt) {
 
@@ -17,7 +42,7 @@ function generateMix(evt) {
     document.getElementById("main").innerHTML = null;
     searchWord(document.getElementById("search_input").value);
     document.getElementById("search_input").placeholder = document.getElementById("input").value;
-    document.getElementById("search_input").value = null;
+    document.getElementById("search_input").value = "";
     document.getElementById("search_input").focus();
 }
 
@@ -59,6 +84,7 @@ function updateS(input) {
     imgbox.className = "item_image";
     imgbox.src = input.images["spectral_bw_l"];
     imgbox.alt = "image";
+    imgbox.addEventListener("click", toggleMute);
     listItem.appendChild(imgbox);
 
     let audiobox = document.createElement("div");
