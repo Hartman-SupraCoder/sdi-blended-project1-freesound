@@ -1,33 +1,25 @@
 
-console.log('STARTED GOOD');
-
-let apiKey = "FD2GHPOjG5dFZt72VxbrfO74wcT4fFKdfgAMjvnf";
-
+let apiKey = null;
+document.getElementById("token_input").focus();
 
 document.getElementById('search_submit').addEventListener("click", generateMix);
 document.getElementById('search_input').addEventListener("keyup", generateMix);
-document.getElementById("search_input").focus();
-
 
 function generateMix(evt) {
 
-
     if (document.getElementById('search_input').value.length === 0) {
         return;
-      }
-      if (evt.key !== "Enter" && evt.key !== undefined) {
+    }
+    if (evt.key !== "Enter" && evt.key !== undefined) {
         return;
-      }
-    
-      document.getElementById("test").innerHTML = null;
-      searchWord(document.getElementById("search_input").value);
-      document.getElementById("search_input").placeholder = document.getElementById("input").value;
-      document.getElementById("search_input").value = null;
-      document.getElementById("search_input").focus();
-
+    }
+    apiKey = document.getElementById("token_input").value
+    document.getElementById("main").innerHTML = null;
+    searchWord(document.getElementById("search_input").value);
+    document.getElementById("search_input").placeholder = document.getElementById("input").value;
+    document.getElementById("search_input").value = null;
+    document.getElementById("search_input").focus();
 }
-
-
 
 
 function FetchData(url) {
@@ -60,6 +52,7 @@ function updateS(input) {
     textbox.className = "item_text";
     textbox.innerHTML = input.name;
     textbox.href = input.url;
+    textbox.target = "_blank"
     listItem.appendChild(textbox);
 
     let imgbox = document.createElement("img");
@@ -71,7 +64,7 @@ function updateS(input) {
     let audiobox = document.createElement("div");
     audiobox.className = "item_audio";
     audiobox.innerHTML = `
-    <audio autoplay>
+    <audio autoplay loop>
     <source src="${input.previews["preview-hq-mp3"]}" type="audio/ogg">
     <source src="${input.previews["preview-hq-ogg"]}" type="audio/mpeg">
     Your browser does not support the audio element.
@@ -79,7 +72,7 @@ function updateS(input) {
     `
     listItem.appendChild(audiobox);
 
-    document.getElementById(`test`).appendChild(listItem);
+    document.getElementById("main").appendChild(listItem);
 }
 
 function updateP(input) {
