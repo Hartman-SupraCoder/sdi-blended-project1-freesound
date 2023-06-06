@@ -1,5 +1,5 @@
 let helpText = `
-This interactive site searches for sounds on 'freesound.org' given keywords.  Once loaded the top sound results will appear below and automatically play on loop.  Note, results are not gratinated to match, but best effort of Freedsound’s search algorithm.  All results use the Freesound API v2.  Please create a free API token/key for use in this site from your Freesound's account at 'https://freesound.org/apiv2/apply'.
+This interactive site searches for sounds on 'freesound.org' given keywords.  Once loaded, top sound results will appear below and automatically play on loop.  Mute a single sound by clicking its wave image.  Note, results are not gratinated to match, but best effort of Freedsound’s search algorithm.  All results use Freesound API v2.  Please create a free API token/key for use in this site from your Freesound's account at 'https://freesound.org/apiv2/apply'.
 `;
 let helpActive = false;
 
@@ -24,10 +24,16 @@ function toggleHelp() {
 }
 
 function toggleMute(evt) {
-    console.log(evt.currentTarget);
+    console.log(evt.currentTarget.parentElement.lastChild);
+    console.log(evt.currentTarget.style.opacity);
+    if(evt.currentTarget.style.opacity > 0.9) {
+        evt.currentTarget.style.opacity = 0.2;
+        evt.currentTarget.parentElement.lastChild.muted = true;
+    } else {
+        evt.currentTarget.style.opacity = 1.0;
+        evt.currentTarget.parentElement.lastChild.muted = false;
 
-
-
+    }
 }
 
 function generateMix(evt) {
@@ -41,7 +47,7 @@ function generateMix(evt) {
     apiKey = document.getElementById("token_input").value
     document.getElementById("main").innerHTML = null;
     searchWord(document.getElementById("search_input").value);
-    document.getElementById("search_input").placeholder = document.getElementById("input").value;
+    document.getElementById("search_input").placeholder = document.getElementById("search_input").value;
     document.getElementById("search_input").value = "";
     document.getElementById("search_input").focus();
 }
@@ -84,9 +90,11 @@ function updateS(input) {
     imgbox.className = "item_image";
     imgbox.src = input.images["spectral_bw_l"];
     imgbox.alt = "image";
+    imgbox.style.opacity = 1.0;
     imgbox.addEventListener("click", toggleMute);
     listItem.appendChild(imgbox);
 
+    /*
     let audiobox = document.createElement("div");
     audiobox.className = "item_audio";
     audiobox.innerHTML = `
@@ -97,6 +105,19 @@ function updateS(input) {
     </audio>
     `
     listItem.appendChild(audiobox);
+    */
+
+    let audioloop = document.createElement("audio");
+    audioloop.loop = true;
+    audioloop.autoplay = true;
+    audioloop.muted = false;
+    audioloop.className = "item_audio";
+    audioloop.innerHTML = `
+    <source src="${input.previews["preview-hq-mp3"]}" type="audio/ogg">
+    <source src="${input.previews["preview-hq-ogg"]}" type="audio/mpeg">
+    Your browser does not support the audio element.
+    `
+    listItem.appendChild(audioloop);
 
     document.getElementById("main").appendChild(listItem);
 }
