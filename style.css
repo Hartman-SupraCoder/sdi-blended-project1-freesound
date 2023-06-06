@@ -1,0 +1,25 @@
+
+* {
+    outline: auto;
+}
+
+
+nav {
+    height: 100px;
+
+}
+
+main {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.item {
+    width: 20%;
+}
+
+img {
+    width: 100%;
+}
+
+
